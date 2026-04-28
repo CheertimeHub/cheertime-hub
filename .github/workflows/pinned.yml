@@ -1,0 +1,52 @@
+name: Fetch Pinned Repos
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # run every day at midnight
+  workflow_dispatch:        # allow manual trigger
+
+jobs:
+  fetch-pinned:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch pinned repos via GraphQL
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          curl -s -H "Authorization: bearer $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"query":"{ user(login: \"CheertimeHub\") { pinnedItems(first: 6, types: REPOSITORY) { nodes { ... on Repository { name description url stargazerCount primaryLanguage { name color } } } } } }"}' \
+            https://api.github.com/graphql \
+          | node -e "
+            const raw = [];
+            process.stdin.resume();
+            process.stdin.on('data', d => raw.push(d));
+            process.stdin.on('end', () => {
+              const data = JSON.parse(Buffer.concat(raw));
+              const nodes = data?.data?.user?.pinnedItems?.nodes || [];
+              const out = nodes.map(r => ({
+                name:        r.name,
+                full_name:   'CheertimeHub/' + r.name,
+                description: r.description,
+                url:         r.url,
+                language:    r.primaryLanguage?.name || null,
+                stars:       r.stargazerCount,
+              }));
+              process.stdout.write(JSON.stringify(out, null, 2));
+            });
+          " > pinned.json
+
+      - name: Commit pinned.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pinned.json
+          git diff --cached --quiet || git commit -m "chore: update pinned repos [skip ci]"
+          git push

@@ -1,0 +1,486 @@
+/* ============================================================
+   RESET & PIXEL BASE
+   ============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+@font-face {
+  font-family:'SproutPixel';
+  src:url('assets/sprout-font.ttf') format('truetype');
+}
+
+:root {
+  --panel-fill: #d4b483;
+  --panel-cream:#f0e0b0;
+  --panel-bdr:  #7a4a1e;
+  --btn-fill:   #e8d090;
+  --green-btn:  #6a9040;
+  --green-bdr:  #3a5820;
+  --rose:       #c06060;
+  --olive:      #6a7840;
+  --olive-dk:   #485428;
+  --text:       #3a2010;
+  --text-md:    #6a4828;
+  --text-lt:    #9a7848;
+  --sky-top:    #6ab4d8;
+  --sky-bot:    #a8d8f0;
+  --shadow:     rgba(20,10,0,.55);
+}
+
+html, body {
+  width:100%; height:100%;
+  overflow:hidden;   /* ไม่ scroll เลย */
+}
+
+body {
+  font-family:'Nunito', sans-serif;
+  color:var(--text);
+  background:#6ab4d8;
+}
+
+/* ============================================================
+   CANVAS LAYERS
+   ============================================================ */
+#bg-canvas, #petal-canvas {
+  position:fixed; inset:0;
+  width:100vw; height:100vh;
+  pointer-events:none;
+}
+#bg-canvas    { z-index:0; image-rendering:pixelated; }
+#petal-canvas { z-index:2; image-rendering:pixelated; }
+
+/* ============================================================
+   PAGE WRAP — เต็มหน้าจอ ไม่ scroll
+   ============================================================ */
+.page-wrap {
+  position:fixed; inset:0;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:16px 12px;
+  gap:0;
+  overflow:hidden;
+}
+
+/* ============================================================
+   PIXEL ROPE helper
+   ============================================================ */
+.rope {
+  position:absolute; top:-32px;
+  width:8px; height:36px;
+  image-rendering:pixelated;
+  background: repeating-linear-gradient(
+    180deg,
+    #c8a050 0px,#c8a050 4px,
+    #7a4e18 4px,#7a4e18 8px
+  );
+  z-index:5;
+}
+
+/* ============================================================
+   ① SIGNBOARD
+   Uses 4x-dialog-big.png (176×48 → 704×192 px)
+   Border is 6px at 1x = 24px at 4x
+   ============================================================ */
+.sign-wrap {
+  position:relative;
+  width:92%; max-width:480px;
+  display:flex; flex-direction:column; align-items:center;
+  flex-shrink:0;
+}
+
+.rope-l { left:20%; }
+.rope-r { right:20%; }
+
+.sign-board {
+  width:100%;
+  position:relative;
+  text-align:center;
+  padding:10px 48px 8px;
+
+  /* Sprout dialog sprite as 9-slice border */
+  border-style:solid;
+  border-width:24px;
+  border-image:url('assets/4x-dialog-big.png') 24 fill / 24px stretch;
+
+  image-rendering:pixelated;
+  filter:drop-shadow(0 8px 0 rgba(20,10,0,.4)) drop-shadow(0 10px 24px rgba(0,0,0,.5));
+}
+
+.sc {
+  position:absolute; font-size:1.5rem; line-height:1;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.4));
+  z-index:2;
+}
+.sc-tl { top:-8px;  left:-4px;  transform:scaleX(-1); }
+.sc-tr { top:-8px;  right:-4px; }
+.sc-bl { bottom:-8px; left:-4px;  transform:scaleX(-1) scaleY(-1); }
+.sc-br { bottom:-8px; right:-4px; transform:scaleY(-1); }
+
+.sign-inner {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+
+.sign-title {
+  font-family:'Comfortaa', cursive;
+  font-size:1.6rem; font-weight:700;
+  color:var(--panel-bdr);
+  letter-spacing:2px;
+  text-shadow:1px 2px 0 rgba(255,255,255,.4), 0 -1px 0 rgba(0,0,0,.1);
+}
+
+.sign-deco { font-size:1rem; color:var(--panel-bdr); opacity:.7; }
+
+.sign-sub {
+  font-family:'Comfortaa', cursive;
+  font-size:.62rem; color:var(--text-md);
+  letter-spacing:4px; margin-top:3px;
+}
+
+/* ============================================================
+   ② NAVBAR
+   Each button uses 4x-btn-normal.png (88×32 → 352×128 px)
+   Border ~4px at 1x = 16px at 4x
+   ============================================================ */
+.nav-wrap {
+  width:92%; max-width:480px;
+  margin-bottom:10px;
+  flex-shrink:0;
+}
+
+.navbar {
+  display:flex; justify-content:center; gap:8px;
+  padding:10px 16px 12px;
+
+  /* wood plank bar */
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0,transparent 14px,
+      rgba(0,0,0,.07) 14px,rgba(0,0,0,.07) 16px),
+    linear-gradient(180deg,#8a5830 0%,#4e2e10 55%,#6a3c18 100%);
+
+  border:4px solid #2e1808;
+  border-top:none;
+  border-radius:0 0 6px 6px;
+  image-rendering:pixelated;
+  box-shadow:0 6px 0 #1a0c04, 0 10px 20px var(--shadow);
+}
+
+.nav-btn {
+  font-family:'Comfortaa', cursive;
+  font-size:.8rem; font-weight:700;
+  color:var(--text);
+  text-decoration:none;
+  padding:8px 16px;
+  cursor:pointer;
+
+  /* Sprout button sprite */
+  border-style:solid;
+  border-width:12px;
+  border-image:url('assets/4x-btn-normal.png') 16 fill / 12px stretch;
+
+  image-rendering:pixelated;
+  transition:filter .1s, transform .1s;
+  white-space:nowrap;
+}
+
+.nav-btn:hover { filter:brightness(1.08); transform:translateY(-2px); }
+
+.nav-btn.active {
+  /* tint green for active */
+  border-image:url('assets/4x-btn-normal.png') 16 fill / 12px stretch;
+  filter:hue-rotate(80deg) saturate(1.4);
+  color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
+/* ============================================================
+   ③ WELCOME BANNER
+   Uses 4x-dialog-med.png (128×48 → 512×192)
+   Border ~6px at 1x = 24px at 4x
+   ============================================================ */
+.welcome-mini {
+  position:relative;
+  display:flex; align-items:center; gap:12px;
+  padding:6px 28px;
+  margin-bottom:10px;
+  flex-shrink:0;
+
+  border-style:solid;
+  border-width:20px;
+  border-image:url('assets/4x-dialog-med.png') 20 fill / 20px stretch;
+
+  image-rendering:pixelated;
+  filter:drop-shadow(0 5px 0 rgba(20,10,0,.35)) drop-shadow(0 7px 14px rgba(0,0,0,.45));
+}
+
+.welcome-mini::before, .welcome-mini::after {
+  content:''; position:absolute; top:-24px;
+  width:6px; height:26px;
+  background:repeating-linear-gradient(
+    180deg,#c8a050 0,#c8a050 4px,#7a4e18 4px,#7a4e18 8px
+  );
+  image-rendering:pixelated;
+}
+.welcome-mini::before { left:22%; }
+.welcome-mini::after  { right:22%; }
+
+.wm-text {
+  font-family:'Comfortaa', cursive;
+  font-size:1.15rem; font-weight:700;
+  color:var(--panel-bdr);
+  text-shadow:1px 1px 0 rgba(255,255,255,.5);
+}
+.wm-deco { font-size:.78rem; color:var(--text-md); letter-spacing:2px; }
+
+/* ============================================================
+   ④ MAIN BOARD
+   Uses 4x-panel-main.png (128×144 → 512×576)
+   Border ~6px at 1x = 24px at 4x
+   ============================================================ */
+.main-board {
+  display:flex; gap:14px;
+  width:100%; max-width:640px;
+  position:relative;
+  padding:18px 16px;
+  flex:1;
+  min-height:0;
+
+  border-style:solid;
+  border-width:24px;
+  border-image:url('assets/4x-panel-main.png') 24 fill / 24px stretch;
+
+  image-rendering:pixelated;
+  filter:drop-shadow(0 12px 0 rgba(20,10,0,.4)) drop-shadow(0 16px 32px rgba(0,0,0,.5));
+}
+
+/* pixel screws */
+.scr {
+  position:absolute;
+  width:12px; height:12px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#c09050,#4a2808);
+  border:2px solid #2e1808;
+  image-rendering:pixelated;
+}
+.scr::before,.scr::after {
+  content:''; position:absolute;
+  background:rgba(0,0,0,.3); border-radius:1px;
+}
+.scr::before { top:50%;left:2px;right:2px;height:1px;transform:translateY(-50%); }
+.scr::after  { left:50%;top:2px;bottom:2px;width:1px;transform:translateX(-50%); }
+.scr-tl { top:-12px; left:-12px; }
+.scr-tr { top:-12px; right:-12px; }
+.scr-bl { bottom:-12px; left:-12px; }
+.scr-br { bottom:-12px; right:-12px; }
+
+/* ============================================================
+   ⑤ LEFT PANEL
+   ============================================================ */
+.left-panel {
+  width:152px; flex-shrink:0;
+  display:flex; flex-direction:column;
+  align-items:center; gap:7px;
+  overflow:hidden;
+}
+
+/* avatar ring */
+.av-wrap {
+  width:100px; height:100px;
+  border-radius:50%; padding:4px;
+  background:radial-gradient(circle at 35% 35%,#d4a870,#7a4a1e);
+  image-rendering:pixelated;
+  filter:drop-shadow(0 4px 0 #2e1808);
+}
+.av-wrap img {
+  width:100%; height:100%;
+  border-radius:50%; object-fit:cover;
+  border:2px solid var(--panel-cream);
+  background:var(--panel-cream);
+  display:block;
+}
+
+/* name plate */
+.name-plate {
+  display:flex; align-items:center; gap:5px;
+  padding:6px 10px;
+  font-family:'Caveat', cursive;
+  font-size:1.05rem; font-weight:700;
+  color:var(--panel-bdr);
+  white-space:nowrap;
+
+  border-style:solid;
+  border-width:10px;
+  border-image:url('assets/4x-btn-normal.png') 16 fill / 10px stretch;
+  image-rendering:pixelated;
+}
+
+/* burrow bubble */
+.burrow {
+  width:100%;
+  padding:8px 10px;
+  font-size:.76rem; color:var(--text-md);
+  text-align:center; line-height:1.65;
+  position:relative;
+
+  border-style:solid;
+  border-width:14px;
+  border-image:url('assets/4x-dialog-med.png') 20 fill / 14px stretch;
+  image-rendering:pixelated;
+}
+.burrow::before {
+  content:'▲'; position:absolute;
+  top:-14px; left:50%; transform:translateX(-50%);
+  font-size:.55rem; color:var(--panel-bdr);
+}
+
+.div-dots {
+  font-size:.62rem; color:var(--text-lt);
+  letter-spacing:2px; text-align:center;
+}
+
+/* links */
+.links { display:flex; flex-direction:column; gap:6px; width:100%; }
+
+.lnk {
+  display:flex; align-items:center; gap:8px;
+  text-decoration:none;
+  color:var(--text-md);
+  font-family:'Caveat', cursive;
+  font-size:1.05rem; font-weight:700;
+  transition:all .1s;
+}
+.lnk:hover { color:var(--rose); transform:translateX(3px); }
+
+.lnk-icon {
+  width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.9rem; flex-shrink:0;
+
+  border-style:solid;
+  border-width:8px;
+  border-image:url('assets/4x-btn-normal.png') 16 fill / 8px stretch;
+  image-rendering:pixelated;
+}
+
+/* ============================================================
+   ⑥ RIGHT PANEL
+   ============================================================ */
+.right-panel {
+  flex:1; min-width:0; min-height:0;
+  display:flex; flex-direction:column; gap:8px;
+  overflow:hidden;
+}
+
+/* title bar */
+.r-titlebar {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 14px;
+
+  /* use dialog-big with rose tint for title bar */
+  border-style:solid;
+  border-width:16px;
+  border-image:url('assets/4x-dialog-big.png') 24 fill / 16px stretch;
+  filter:sepia(.6) saturate(1.8) hue-rotate(-20deg);
+  image-rendering:pixelated;
+}
+.r-titlebar .r-leaf { font-size:1rem; filter:none; }
+.r-titlebar .r-title {
+  font-family:'Comfortaa', cursive;
+  font-size:1.05rem; font-weight:700;
+  color:var(--panel-bdr);
+  filter:sepia(0) saturate(1); /* reset from parent */
+  flex:1; text-align:center;
+  text-shadow:1px 1px 0 rgba(255,255,255,.4);
+}
+
+/* bio */
+.r-bio {
+  font-size:.78rem; color:var(--text-md);
+  line-height:1.72; font-style:italic;
+}
+
+/* chips */
+.r-chips { display:flex; flex-wrap:wrap; gap:4px; }
+.r-chip {
+  padding:3px 10px;
+  font-size:.68rem; color:var(--text-md);
+  border-style:solid; border-width:8px;
+  border-image:url('assets/4x-btn-normal.png') 16 fill / 8px stretch;
+  image-rendering:pixelated;
+}
+
+/* stats */
+.r-stats { display:flex; gap:6px; }
+.r-stat {
+  flex:1;
+  padding:8px 6px;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+
+  border-style:solid; border-width:12px;
+  border-image:url('assets/4x-dialog-med.png') 20 fill / 12px stretch;
+  image-rendering:pixelated;
+}
+.r-stat-ico { font-size:.9rem; }
+.r-stat-val {
+  font-family:'Comfortaa', cursive;
+  font-size:1.05rem; font-weight:700; color:var(--rose);
+}
+.r-stat-lbl { font-size:.62rem; color:var(--text-lt); }
+
+/* section header */
+.sec-hdr {
+  display:flex; align-items:center; gap:6px;
+  padding-bottom:5px; margin-bottom:7px;
+  border-bottom:3px solid rgba(122,74,30,.3);
+}
+.sec-ico { font-size:.9rem; }
+.sec-ttl {
+  font-family:'Caveat', cursive;
+  font-size:1.2rem; font-weight:700;
+  color:var(--text-md);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  text-decoration-color:var(--panel-bdr);
+}
+
+/* project list */
+.proj-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.proj-item { display:flex; align-items:flex-start; gap:8px; font-size:.77rem; color:var(--text-md); line-height:1.5; }
+
+.proj-blt {
+  flex-shrink:0; margin-top:3px;
+  width:13px; height:13px; border-radius:50%;
+  background:radial-gradient(circle at 38% 36%,#909858,var(--olive));
+  border:2px solid var(--olive-dk);
+  image-rendering:pixelated;
+}
+
+.proj-body { flex:1; min-width:0; }
+.proj-name { font-weight:800; font-size:.79rem; color:var(--text); text-decoration:none; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.proj-name:hover { color:var(--rose); text-decoration:underline; }
+.proj-desc { font-size:.70rem; color:var(--text-lt); margin-top:1px; }
+.proj-meta { display:flex; gap:6px; align-items:center; margin-top:3px; }
+.proj-lang { display:flex; align-items:center; gap:3px; font-size:.65rem; color:var(--text-lt); }
+.ldot { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
+.proj-stars { font-size:.65rem; color:var(--text-lt); }
+.proj-empty { font-size:.75rem; color:var(--text-lt); padding:12px 0; text-align:center; }
+
+/* footer hidden — no scroll mode */
+.footer { display:none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:540px) {
+  .main-board  { flex-direction:column; }
+  .left-panel  { width:100%; }
+  .av-wrap     { width:80px; height:80px; }
+  .sign-title  { font-size:1.3rem; }
+  .navbar      { flex-wrap:wrap; }
+  .r-stats     { flex-wrap:wrap; }
+}
+
+::-webkit-scrollbar       { width:6px; }
+::-webkit-scrollbar-track { background:#4a7838; }
+::-webkit-scrollbar-thumb { background:var(--panel-bdr); border-radius:0; }

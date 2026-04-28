@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CheertimeHub — WorkingSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,800;1,400&family=Comfortaa:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- pixel art grass background built with canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- animated pixel trees row -->
+  <div class="tree-row" id="tree-row"></div>
+
+  <!-- falling pixel petals -->
+  <canvas id="petal-canvas"></canvas>
+
+  <div class="page-wrap">
+
+    <!-- ① SIGNBOARD -->
+    <div class="sign-wrap">
+      <div class="rope rope-l"></div>
+      <div class="rope rope-r"></div>
+      <div class="sign-board">
+        <span class="sc sc-tl">🌿</span>
+        <span class="sc sc-tr">🌿</span>
+        <span class="sc sc-bl">🍄</span>
+        <span class="sc sc-br">🍄</span>
+        <div class="sign-inner">
+          <span class="sign-deco">🐰✦</span>
+          <div>
+            <h1 class="sign-title">CheertimeHub</h1>
+            <div class="sign-sub">— WorkingSpace —</div>
+          </div>
+          <span class="sign-deco">✦🐿️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② NAVBAR -->
+    <div class="nav-wrap">
+      <nav class="navbar">
+        <a href="#home"     class="nav-btn active">Home</a>
+        <a href="#about"    class="nav-btn">About</a>
+        <a href="#projects" class="nav-btn">Projects</a>
+        <a href="#contact"  class="nav-btn">Contact</a>
+      </nav>
+    </div>
+
+    <!-- ③ WELCOME BANNER -->
+    <div class="welcome-mini">
+      <span class="wm-deco">🍄·✦·</span>
+      <span class="wm-text">Welcome!</span>
+      <span class="wm-deco">·✦·🍄</span>
+    </div>
+
+    <!-- ④ MAIN BOARD -->
+    <div class="main-board" id="home">
+      <div class="scr scr-tl"></div>
+      <div class="scr scr-tr"></div>
+      <div class="scr scr-bl"></div>
+      <div class="scr scr-br"></div>
+
+      <!-- LEFT -->
+      <div class="left-panel" id="about">
+        <div class="av-wrap">
+          <img id="avatar" src="" alt="avatar"/>
+        </div>
+        <div class="name-plate">
+          <span>☘️</span>
+          <span id="display-name">CheertimeHub</span>
+          <span>🎀</span>
+        </div>
+        <div class="burrow">
+          <p>Welcome to my Space</p>
+          <p>enjoy&nbsp;(´▽`)</p>
+        </div>
+        <div class="div-dots">🍄 ♥ 🍄 ♥ 🍄</div>
+        <div class="links" id="contact">
+          <a href="https://github.com/CheertimeHub" target="_blank" class="lnk">
+            <span class="lnk-icon">🐙</span><span>GitHub</span>
+          </a>
+          <a href="#" class="lnk" id="link-youtube">
+            <span class="lnk-icon">🎬</span><span>YouTube</span>
+          </a>
+          <a href="#" class="lnk" id="link-instagram">
+            <span class="lnk-icon">🌸</span><span>Instagram</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right-panel">
+        <div class="r-titlebar">
+          <span class="r-leaf">🍁</span>
+          <h2 class="r-title" id="r-username">CheertimeHub</h2>
+          <span class="r-leaf">🍁</span>
+        </div>
+        <p class="r-bio" id="full-bio">กำลังโหลดข้อมูลจาก GitHub...</p>
+        <div class="r-chips" id="r-chips"></div>
+        <div class="r-stats">
+          <div class="r-stat">
+            <span class="r-stat-ico">⭐</span>
+            <span class="r-stat-val" id="total-stars">—</span>
+            <span class="r-stat-lbl">Stars</span>
+          </div>
+          <div class="r-stat">
+            <span class="r-stat-ico">📦</span>
+            <span class="r-stat-val" id="total-repos">—</span>
+            <span class="r-stat-lbl">Repos</span>
+          </div>
+          <div class="r-stat">
+            <span class="r-stat-ico">🌿</span>
+            <span class="r-stat-val" id="total-followers">—</span>
+            <span class="r-stat-lbl">Followers</span>
+          </div>
+        </div>
+        <div id="projects">
+          <div class="sec-hdr">
+            <span class="sec-ico">🍂</span>
+            <h3 class="sec-ttl">Pinned Projects</h3>
+          </div>
+          <ul class="proj-list" id="proj-list">
+            <li class="proj-empty">กำลังโหลด...</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      🍄 &nbsp; CheertimeHub WorkingSpace &nbsp;·&nbsp; made with love &nbsp; 🍄
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
